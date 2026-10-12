@@ -1,0 +1,19 @@
+{
+  "$schema": "https://alirezanet.github.io/Husky.Net/schema.json",
+  "tasks": [
+    {
+      "name": "dotnet-build",
+      "group": "pre-commit",
+      "command": "dotnet",
+      "args": ["build", "--no-restore"],
+      "output": "always"
+    },
+    {
+      "name": "dotnet-test",
+      "group": "pre-push",
+      "command": "dotnet",
+      "args": ["test"],
+      "output": "always"
+    }
+  ]
+}
