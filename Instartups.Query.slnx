@@ -11,4 +11,5 @@
     <Project Path="Instartups.Query.Domain/Instartups.Query.Domain.csproj" />
     <Project Path="Instartups.Query.Infrastructure/Instartups.Query.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/tests/" />
 </Solution>
