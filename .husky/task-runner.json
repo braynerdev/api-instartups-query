@@ -11,8 +11,11 @@
     {
       "name": "dotnet-test",
       "group": "pre-push",
-      "command": "dotnet",
-      "args": ["test"],
+      "command": "sh",
+      "args": [
+        "-c",
+        "if find . -name '*Tests.csproj' -not -path '*/bin/*' -not -path '*/obj/*' | grep -q .; then dotnet test; else echo 'Nenhum projeto de teste encontrado, pulando dotnet test.'; fi"
+      ],
       "output": "always"
     }
   ]
