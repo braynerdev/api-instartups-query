@@ -8,8 +8,8 @@ public static class TiposMidiaEnumMap
     {
         return tipoMidiaEnum switch
         {
-            TiposMidiaEnum.FOTO => "FOTO",
-            TiposMidiaEnum.VIDEO => "VÍDEO",
+            TiposMidiaEnum.Foto => "FOTO",
+            TiposMidiaEnum.Video => "VÍDEO",
             _ => "ERRO"
         };
     }
@@ -18,8 +18,8 @@ public static class TiposMidiaEnumMap
     {
         return tipo.Trim().ToUpperInvariant() switch
         {
-            "FOTO" => TiposMidiaEnum.FOTO,
-            "VIDEO" => TiposMidiaEnum.VIDEO,
+            "FOTO" => TiposMidiaEnum.Foto,
+            "VIDEO" => TiposMidiaEnum.Video,
             _ => 0
         };
     }

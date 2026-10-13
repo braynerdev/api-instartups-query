@@ -2,6 +2,6 @@
 
 public enum TiposMidiaEnum
 {
-    FOTO = 1,
-    VIDEO = 2
+    Foto = 1,
+    Video = 2
 }

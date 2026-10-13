@@ -6,8 +6,8 @@ public static class TiposPerfisEnumMapExtension
     {
         return tipoPerfil switch
         {
-            TiposPerfisEnum.STARTUP => "STARTUP",
-            TiposPerfisEnum.INVESTIDOR => "INVESTIDOR",
+            TiposPerfisEnum.Startup => "STARTUP",
+            TiposPerfisEnum.Investidor => "INVESTIDOR",
             _ => "ADMIN"
         };
     }
