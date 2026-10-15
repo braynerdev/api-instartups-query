@@ -1,5 +1,7 @@
 using Instartups.Query.Application.Interfaces;
+using Instartups.Query.Application.Interfaces.Repositories;
 using Instartups.Query.Infrastructure.Persistence;
+using Instartups.Query.Infrastructure.Persistence.Repositories;
 using Instartups.Query.Infrastructure.Service;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,7 +16,9 @@ public static class DependencyInjection
         services.AddHttpContextAccessor();
 
         services.AddSingleton<IDbConnectionFactory, DbConnectionFactory>();
+        services.AddSingleton<LerArquivosSQL>();
         services.AddScoped<IPegarContextoRequisicao, PegarContextoRequisicao>();
+        services.AddScoped<IPerfilRepository, PerfilRepository>();
         return services;
     }
 }

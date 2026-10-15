@@ -1,6 +1,9 @@
 @Instartups.Query.Api_HostAddress = http://localhost:8082
+@Token = COLE_AQUI_O_ACCESS_TOKEN
 
-GET {{Instartups.Query.Api_HostAddress}}
+### Q1 · Meu perfil
+GET {{Instartups.Query.Api_HostAddress}}/api/instartups/query/perfil/me
 Accept: application/json
+Authorization: Bearer {{Token}}
 
 ###

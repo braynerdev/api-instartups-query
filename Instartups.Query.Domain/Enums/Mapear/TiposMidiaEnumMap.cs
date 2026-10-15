@@ -9,7 +9,7 @@ public static class TiposMidiaEnumMap
         return tipoMidiaEnum switch
         {
             TiposMidiaEnum.Foto => "FOTO",
-            TiposMidiaEnum.Video => "VÍDEO",
+            TiposMidiaEnum.Video => "VIDEO",
             _ => "ERRO"
         };
     }
