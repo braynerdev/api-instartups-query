@@ -6,4 +6,5 @@ public class RotasBaseConst
     public const string Perfil = $"{Base}/perfil";
     public const string Feed = $"{Base}/feed";
     public const string Setores = $"{Base}/setores";
+    public const string Busca = $"{Base}/busca";
 }

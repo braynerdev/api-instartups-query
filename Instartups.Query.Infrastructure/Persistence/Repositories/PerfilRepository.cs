@@ -1,6 +1,8 @@
 using Dapper;
 using Instartups.Query.Application.Interfaces;
 using Instartups.Query.Application.Interfaces.Repositories;
+using Instartups.Query.Application.UseCases.BuscarPerfis.Filtros;
+using Instartups.Query.Application.UseCases.BuscarPerfis.Models;
 using Instartups.Query.Application.UseCases.PegarMeuPerfil;
 using Instartups.Query.Application.UseCases.PegarPerfilPublico;
 using Instartups.Query.Infrastructure.Service;
@@ -50,5 +52,17 @@ public class PerfilRepository(
         return await connection.ExecuteScalarAsync<bool>(
             new CommandDefinition(sql, new { PerfilId = perfilId, MeuPerfilId = meuPerfilId }, cancellationToken: ct)
         );
+    }
+
+    public async Task<IReadOnlyList<PerfilBuscaModel>> BuscarPerfisAsync(FiltroBuscaPerfis filtro, CancellationToken ct)
+    {
+        await using var connection = await factory.CreateConnectionAsync(ct);
+        var sql = await lerArquivosSQL.LerArquivoAsync("BuscarPerfisSQL.sql", ct);
+
+        var perfis = await connection.QueryAsync<PerfilBuscaModel>(
+            new CommandDefinition(sql, filtro, cancellationToken: ct)
+        );
+
+        return perfis.AsList();
     }
 }

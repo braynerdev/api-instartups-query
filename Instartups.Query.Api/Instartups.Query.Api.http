@@ -42,4 +42,24 @@ GET {{Instartups.Query.Api_HostAddress}}/api/instartups/query/setores?busca=saud
 Accept: application/json
 Authorization: Bearer {{Token}}
 
+### Q7 · Busca de perfis por nome ou @usuário (sem acento, mínimo 2 caracteres)
+GET {{Instartups.Query.Api_HostAddress}}/api/instartups/query/busca?termo=saude&tipo=todos&limite=20
+Accept: application/json
+Authorization: Bearer {{Token}}
+
+### Q7 · Busca por @usuário só entre startups
+GET {{Instartups.Query.Api_HostAddress}}/api/instartups/query/busca?termo=@vitalis&tipo=startup
+Accept: application/json
+Authorization: Bearer {{Token}}
+
+### Q7 · Busca por e-mail completo (só igualdade exata; volta encontradoPor = "email")
+GET {{Instartups.Query.Api_HostAddress}}/api/instartups/query/busca?termo=fulano@exemplo.com
+Accept: application/json
+Authorization: Bearer {{Token}}
+
+### Q7 · Busca (próxima página; cole o proximoCursor em &cursor=)
+GET {{Instartups.Query.Api_HostAddress}}/api/instartups/query/busca?termo=sa&limite=1&cursor=
+Accept: application/json
+Authorization: Bearer {{Token}}
+
 ###
