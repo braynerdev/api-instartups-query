@@ -12,7 +12,7 @@ public sealed record StartupResponse(
     string Setor
 )
 {
-    public static StartupResponse FromModel(PerfilModel perfil)
+    public static StartupResponse FromModel(PerfilBaseModel perfil)
     {
         return new StartupResponse(
             perfil.Pitch!,

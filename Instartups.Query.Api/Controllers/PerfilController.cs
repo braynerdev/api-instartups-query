@@ -2,6 +2,7 @@ using Instartups.Query.Api.DTOs;
 using Instartups.Query.Application.Common.Constants;
 using Instartups.Query.Application.Interfaces;
 using Instartups.Query.Application.UseCases.PegarMeuPerfil;
+using Instartups.Query.Application.UseCases.PegarPerfilPublico;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Wolverine;
@@ -27,5 +28,20 @@ public class PerfilController(
         var response = await MessageBus.InvokeAsync<PegarMeuPerfilResponse>(query, ct);
 
         return Ok(ResponseDTO<PegarMeuPerfilResponse>.Success(MensagensSucessoConst.PerfilEncontrado, response));
+    }
+
+    [HttpGet("{perfilId:guid}")]
+    [Authorize]
+    [ProducesResponseType<ResponseDTO<PegarPerfilPublicoQueryResponse>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<ResponseDTO<IEnumerable<ValidationErrorDTO>>>(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType<ResponseDTO<string>>(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<ResponseDTO<PegarPerfilPublicoQueryResponse>>> PegarPerfilPublico(Guid perfilId, CancellationToken ct)
+    {
+        Guid UserId = PegarContextoRequisicao.UserId;
+        var query = new PegarPerfilPublicoQuery(UserId, perfilId);
+
+        var response = await MessageBus.InvokeAsync<PegarPerfilPublicoQueryResponse>(query, ct);
+
+        return Ok(ResponseDTO<PegarPerfilPublicoQueryResponse>.Success(MensagensSucessoConst.PerfilEncontrado, response));
     }
 }

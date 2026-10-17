@@ -3,4 +3,5 @@
 public static class CodigosErroConst
 {
     public const string FormatoInvalido = "FORMATO_INVALIDO";
+    public const string CampoObrigatorio = "CAMPO_OBRIGATORIO";
 }

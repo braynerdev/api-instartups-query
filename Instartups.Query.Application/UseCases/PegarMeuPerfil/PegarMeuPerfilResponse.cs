@@ -1,4 +1,3 @@
-using Instartups.Query.Application.Common.Models;
 using Instartups.Query.Application.Common.Response;
 using Instartups.Query.Domain.Enums;
 using Instartups.Query.Domain.Enums.Mapear;
