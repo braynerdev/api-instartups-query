@@ -1,3 +1,4 @@
+using Instartups.Query.Application.Common.Filtros;
 using Instartups.Query.Application.Common.Response;
 using Instartups.Query.Application.Interfaces;
 using Instartups.Query.Application.Interfaces.Repositories;
@@ -12,11 +13,11 @@ public class PegarFeedQueryHandler(
         IPerfilRepository perfilRepository,
         IPostagemRepository postagemRepository,
         IPaginadorService paginador
-    ) : IQueryHandler<PegarFeedQuery, PaginaResponse<PegarFeedQueryResponse>>
+    ) : IQueryHandler<PegarFeedQuery, PaginaResponse<PostagemResponse>>
 {
-    public async Task<PaginaResponse<PegarFeedQueryResponse>> Handle(PegarFeedQuery query, CancellationToken ct)
+    public async Task<PaginaResponse<PostagemResponse>> Handle(PegarFeedQuery query, CancellationToken ct)
     {
-        var cursor = paginador.LerCursor<FeedCursor>(query.Cursor);
+        var cursor = paginador.LerCursor<PostagemCursor>(query.Cursor);
 
         var meuPerfilId = await perfilRepository.PegarMeuPerfilIdAsync(query.UserId, ct)
             ?? throw new PerfilNaoEncontradoException();
@@ -42,8 +43,8 @@ public class PegarFeedQueryHandler(
         return paginador.MontarPagina(
             postagens,
             query.Limite,
-            postagem => new FeedCursor(postagem.DataCriacao, postagem.Id),
-            PegarFeedQueryResponse.FromModel
+            postagem => new PostagemCursor(postagem.DataCriacao, postagem.Id),
+            PostagemResponse.FromModel
         );
     }
 }

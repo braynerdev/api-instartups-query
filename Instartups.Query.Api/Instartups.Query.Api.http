@@ -22,4 +22,14 @@ GET {{Instartups.Query.Api_HostAddress}}/api/instartups/query/feed?tipo=startup&
 Accept: application/json
 Authorization: Bearer {{Token}}
 
+### Q4 · Postagens do perfil (no meu perfil, inclui as desativadas)
+GET {{Instartups.Query.Api_HostAddress}}/api/instartups/query/perfil/{{PerfilId}}/postagens?limite=20
+Accept: application/json
+Authorization: Bearer {{Token}}
+
+### Q4 · Postagens do perfil (próxima página; cole o proximoCursor em &cursor=)
+GET {{Instartups.Query.Api_HostAddress}}/api/instartups/query/perfil/{{PerfilId}}/postagens?limite=2&cursor=
+Accept: application/json
+Authorization: Bearer {{Token}}
+
 ###

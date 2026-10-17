@@ -1,8 +1,8 @@
-using Instartups.Query.Application.UseCases.PegarFeed.Models;
+using Instartups.Query.Application.Common.Models;
 using Instartups.Query.Domain.Enums;
 using Instartups.Query.Domain.Enums.Mapear;
 
-namespace Instartups.Query.Application.UseCases.PegarFeed.Responses;
+namespace Instartups.Query.Application.Common.Response;
 
 public sealed record MidiaPostagemResponse(
     Guid Id,

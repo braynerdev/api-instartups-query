@@ -1,9 +1,8 @@
-using Instartups.Query.Application.UseCases.PegarFeed.Models;
-using Instartups.Query.Application.UseCases.PegarFeed.Responses;
+using Instartups.Query.Application.Common.Models;
 
-namespace Instartups.Query.Application.UseCases.PegarFeed;
+namespace Instartups.Query.Application.Common.Response;
 
-public sealed record PegarFeedQueryResponse(
+public sealed record PostagemResponse(
     Guid Id,
     string Descricao,
     DateTimeOffset DataCriacao,
@@ -14,9 +13,9 @@ public sealed record PegarFeedQueryResponse(
     AutorPostagemResponse Autor
 )
 {
-    public static PegarFeedQueryResponse FromModel(PostagemFeedModel postagem)
+    public static PostagemResponse FromModel(PostagemModel postagem)
     {
-        return new PegarFeedQueryResponse(
+        return new PostagemResponse(
             postagem.Id,
             postagem.Descricao,
             postagem.DataCriacao,

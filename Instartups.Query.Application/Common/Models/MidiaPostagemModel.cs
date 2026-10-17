@@ -1,4 +1,4 @@
-namespace Instartups.Query.Application.UseCases.PegarFeed.Models;
+namespace Instartups.Query.Application.Common.Models;
 
 public sealed class MidiaPostagemModel
 {

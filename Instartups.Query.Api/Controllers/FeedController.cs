@@ -18,10 +18,10 @@ public class FeedController(
 {
     [HttpGet]
     [Authorize]
-    [ProducesResponseType<ResponseDTO<PaginaResponse<PegarFeedQueryResponse>>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<ResponseDTO<PaginaResponse<PostagemResponse>>>(StatusCodes.Status200OK)]
     [ProducesResponseType<ResponseDTO<IEnumerable<ValidationErrorDTO>>>(StatusCodes.Status400BadRequest)]
     [ProducesResponseType<ResponseDTO<string>>(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<ResponseDTO<PaginaResponse<PegarFeedQueryResponse>>>> PegarFeed(
+    public async Task<ActionResult<ResponseDTO<PaginaResponse<PostagemResponse>>>> PegarFeed(
         [FromQuery] string? tipo,
         [FromQuery] double? raioKm,
         [FromQuery] string[]? setores,
@@ -38,8 +38,8 @@ public class FeedController(
             paginacao.Limite
         );
 
-        var response = await MessageBus.InvokeAsync<PaginaResponse<PegarFeedQueryResponse>>(query, ct);
+        var response = await MessageBus.InvokeAsync<PaginaResponse<PostagemResponse>>(query, ct);
 
-        return Ok(ResponseDTO<PaginaResponse<PegarFeedQueryResponse>>.Success(MensagensSucessoConst.FeedEncontrado, response));
+        return Ok(ResponseDTO<PaginaResponse<PostagemResponse>>.Success(MensagensSucessoConst.FeedEncontrado, response));
     }
 }

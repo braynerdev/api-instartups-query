@@ -1,6 +1,6 @@
-namespace Instartups.Query.Application.UseCases.PegarFeed.Models;
+namespace Instartups.Query.Application.Common.Models;
 
-public sealed class PostagemFeedModel
+public sealed class PostagemModel
 {
     public Guid Id { get; init; }
     public string Descricao { get; init; } = null!;

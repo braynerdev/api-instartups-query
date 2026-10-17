@@ -41,4 +41,14 @@ public class PerfilRepository(
             new CommandDefinition(sql, new { UsuarioId = usuarioId }, cancellationToken: ct)
         );
     }
+
+    public async Task<bool> PerfilVisivelAsync(Guid perfilId, Guid meuPerfilId, CancellationToken ct)
+    {
+        await using var connection = await factory.CreateConnectionAsync(ct);
+        var sql = await lerArquivosSQL.LerArquivoAsync("PerfilVisivelSQL.sql", ct);
+
+        return await connection.ExecuteScalarAsync<bool>(
+            new CommandDefinition(sql, new { PerfilId = perfilId, MeuPerfilId = meuPerfilId }, cancellationToken: ct)
+        );
+    }
 }
