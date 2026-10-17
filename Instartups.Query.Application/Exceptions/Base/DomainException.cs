@@ -1,4 +1,4 @@
-namespace Instartups.Query.Domain.Exceptions.Base;
+namespace Instartups.Query.Application.Exceptions.Base;
 
 public abstract class DomainException : BaseException
 {

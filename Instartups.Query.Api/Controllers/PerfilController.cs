@@ -1,7 +1,7 @@
 using Instartups.Query.Api.DTOs;
+using Instartups.Query.Application.Common.Constants;
 using Instartups.Query.Application.Interfaces;
 using Instartups.Query.Application.UseCases.PegarMeuPerfil;
-using Instartups.Query.Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Wolverine;

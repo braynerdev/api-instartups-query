@@ -8,7 +8,6 @@
   <Folder Name="/src/">
     <Project Path="Instartups.Query.Api/Instartups.Query.Api.csproj" />
     <Project Path="Instartups.Query.Application/Instartups.Query.Application.csproj" />
-    <Project Path="Instartups.Query.Domain/Instartups.Query.Domain.csproj" />
     <Project Path="Instartups.Query.Infrastructure/Instartups.Query.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/tests/" />

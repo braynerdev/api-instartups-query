@@ -1,5 +1,5 @@
 ﻿using Instartups.Query.Application.Interfaces;
-using Instartups.Query.Domain.Exceptions;
+using Instartups.Query.Application.Exceptions;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 

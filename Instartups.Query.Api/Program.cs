@@ -1,6 +1,6 @@
 using Instartups.Query.Api.Configurations;
 using Instartups.Query.Api.Extensions;
-using Instartups.Query.Domain.Constants;
+using Instartups.Query.Application.Common.Constants;
 using Instartups.Query.Infrastructure.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);

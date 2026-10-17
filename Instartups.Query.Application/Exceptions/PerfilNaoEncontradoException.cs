@@ -1,6 +1,6 @@
-using Instartups.Query.Domain.Exceptions.Base;
+using Instartups.Query.Application.Exceptions.Base;
 
-namespace Instartups.Query.Domain.Exceptions;
+namespace Instartups.Query.Application.Exceptions;
 
 public class PerfilNaoEncontradoException : NotFoundException
 {

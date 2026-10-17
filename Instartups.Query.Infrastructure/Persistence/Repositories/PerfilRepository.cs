@@ -1,7 +1,7 @@
 using Dapper;
+using Instartups.Query.Application.Common.Models;
 using Instartups.Query.Application.Interfaces;
 using Instartups.Query.Application.Interfaces.Repositories;
-using Instartups.Query.Domain.Models;
 using Instartups.Query.Infrastructure.Service;
 
 namespace Instartups.Query.Infrastructure.Persistence.Repositories;

@@ -1,5 +1,4 @@
-using System.Security.Claims;
-using Instartups.Query.Domain.Constants;
+using Instartups.Query.Application.Common.Constants;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Instartups.Query.Api.Configurations;

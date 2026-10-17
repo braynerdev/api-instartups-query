@@ -1,4 +1,4 @@
-using Instartups.Query.Domain.Models;
+using Instartups.Query.Application.Common.Models;
 
 namespace Instartups.Query.Application.Interfaces.Repositories;
 

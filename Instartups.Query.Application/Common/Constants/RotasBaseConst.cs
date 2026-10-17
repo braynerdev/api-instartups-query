@@ -1,4 +1,4 @@
-namespace Instartups.Query.Domain.Constants;
+namespace Instartups.Query.Application.Common.Constants;
 
 public class RotasBaseConst
 {

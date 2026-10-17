@@ -1,6 +1,6 @@
 using Instartups.Query.Api.DTOs;
-using Instartups.Query.Domain.Constants;
-using Instartups.Query.Domain.Exceptions.Base;
+using Instartups.Query.Application.Common.Constants;
+using Instartups.Query.Application.Exceptions.Base;
 using Microsoft.AspNetCore.RateLimiting;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;

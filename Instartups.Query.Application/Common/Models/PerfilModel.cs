@@ -1,4 +1,4 @@
-namespace Instartups.Query.Domain.Models;
+namespace Instartups.Query.Application.Common.Models;
 
 public sealed class PerfilModel
 {
@@ -14,7 +14,7 @@ public sealed class PerfilModel
     public int TotalSeguindo { get; init; }
     public int TotalCurtidas { get; init; }
     public bool Ativo { get; init; }
-    public DateTime DataCriacao { get; init; }
+    public DateTimeOffset DataCriacao { get; init; }
 
     public string? Pitch { get; init; }
     public DateTime? DataFundacao { get; init; }
