@@ -5,9 +5,9 @@ using System.Security.Claims;
 
 namespace Instartups.Query.Infrastructure.Service;
 
-public class PegarContextoRequisicao(
+public class PegarContextoRequisicaoService(
     IHttpContextAccessor _httpContextAccessor
-) : IPegarContextoRequisicao
+) : IPegarContextoRequisicaoService
 {
     public Guid UserId
     {

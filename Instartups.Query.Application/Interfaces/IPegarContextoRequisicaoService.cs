@@ -1,6 +1,6 @@
 ﻿namespace Instartups.Query.Application.Interfaces;
 
-public interface IPegarContextoRequisicao
+public interface IPegarContextoRequisicaoService
 {
     public Guid UserId { get; }
     public string? UserName { get; }

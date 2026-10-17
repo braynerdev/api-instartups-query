@@ -9,7 +9,7 @@ namespace Instartups.Query.Infrastructure.Persistence.Repositories;
 
 public class PerfilRepository(
         IDbConnectionFactory factory,
-        LerArquivosSQL lerArquivosSQL
+        LerArquivosSQLService lerArquivosSQL
     ) : IPerfilRepository
 {
     public async Task<PerfilModel?> PegarMeuPerfilAsync(Guid usuarioId, CancellationToken ct)

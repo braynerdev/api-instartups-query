@@ -12,7 +12,7 @@ namespace Instartups.Query.Api.Controllers;
 [Route(RotasBaseConst.Perfil)]
 [ApiController]
 public class PerfilController(
-        IPegarContextoRequisicao PegarContextoRequisicao,
+        IPegarContextoRequisicaoService PegarContextoRequisicao,
         IMessageBus MessageBus
     ) : ControllerBase
 {

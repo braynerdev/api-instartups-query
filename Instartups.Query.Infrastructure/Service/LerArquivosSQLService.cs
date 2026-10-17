@@ -3,10 +3,10 @@ using System.Reflection;
 
 namespace Instartups.Query.Infrastructure.Service;
 
-public class LerArquivosSQL
+public class LerArquivosSQLService
 {
     private const string PrefixoRecurso = "Instartups.Query.Infrastructure.Persistence.Queries.";
-    private static readonly Assembly Assembly = typeof(LerArquivosSQL).Assembly;
+    private static readonly Assembly Assembly = typeof(LerArquivosSQLService).Assembly;
     private readonly ConcurrentDictionary<string, string> _cache = new();
 
     public async Task<string> LerArquivoAsync(string nomeArquivo, CancellationToken ct)
