@@ -8,5 +8,6 @@ public static class MensagensErroConst
     public const string CursorInvalido = "Cursor de paginação inválido.";
     public const string ValorMinimo = "O valor do campo deve ser maior que {ComparisonValue}.";
     public const string ValorInvalidoEnum = "O valor informado não é válido para este campo.";
+    public const string BuscaMuitoLonga = "A busca deve ter no máximo {MaxLength} caracteres.";
     public const string LimiteRequisicoes = "Limite de requisições atingido. Tente novamente em instantes.";
 }

@@ -32,4 +32,14 @@ GET {{Instartups.Query.Api_HostAddress}}/api/instartups/query/perfil/{{PerfilId}
 Accept: application/json
 Authorization: Bearer {{Token}}
 
+### Q5 · Setores
+GET {{Instartups.Query.Api_HostAddress}}/api/instartups/query/setores
+Accept: application/json
+Authorization: Bearer {{Token}}
+
+### Q5 · Setores (busca sem acento: "saude" encontra "Saúde")
+GET {{Instartups.Query.Api_HostAddress}}/api/instartups/query/setores?busca=saude
+Accept: application/json
+Authorization: Bearer {{Token}}
+
 ###
