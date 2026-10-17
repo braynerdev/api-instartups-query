@@ -8,4 +8,5 @@ public interface IPostagemRepository
 {
     public Task<IReadOnlyList<PostagemModel>> PegarFeedAsync(FiltroFeed filtro, CancellationToken ct);
     public Task<IReadOnlyList<PostagemModel>> PegarPostagensPerfilAsync(FiltroPostagensPerfil filtro, CancellationToken ct);
+    public Task<PostagemModel?> PegarPostagemAsync(Guid postagemId, Guid meuPerfilId, CancellationToken ct);
 }

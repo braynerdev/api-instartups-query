@@ -1,6 +1,7 @@
 @Instartups.Query.Api_HostAddress = http://localhost:8082
 @Token = COLE_AQUI_O_ACCESS_TOKEN
 @PerfilId = COLE_AQUI_O_ID_DO_PERFIL
+@PostagemId = COLE_AQUI_O_ID_DA_POSTAGEM
 
 ### Q1 · Meu perfil
 GET {{Instartups.Query.Api_HostAddress}}/api/instartups/query/perfil/me
@@ -39,6 +40,11 @@ Authorization: Bearer {{Token}}
 
 ### Q5 · Setores (busca sem acento: "saude" encontra "Saúde")
 GET {{Instartups.Query.Api_HostAddress}}/api/instartups/query/setores?busca=saude
+Accept: application/json
+Authorization: Bearer {{Token}}
+
+### Q6 · Uma postagem (o autor vê também a desativada)
+GET {{Instartups.Query.Api_HostAddress}}/api/instartups/query/postagem/{{PostagemId}}
 Accept: application/json
 Authorization: Bearer {{Token}}
 

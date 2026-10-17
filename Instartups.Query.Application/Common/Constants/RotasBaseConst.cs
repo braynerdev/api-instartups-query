@@ -7,4 +7,5 @@ public class RotasBaseConst
     public const string Feed = $"{Base}/feed";
     public const string Setores = $"{Base}/setores";
     public const string Busca = $"{Base}/busca";
+    public const string Postagem = $"{Base}/postagem";
 }

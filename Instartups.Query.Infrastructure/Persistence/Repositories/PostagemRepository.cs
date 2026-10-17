@@ -42,6 +42,21 @@ public class PostagemRepository(
         return postagens;
     }
 
+    public async Task<PostagemModel?> PegarPostagemAsync(Guid postagemId, Guid meuPerfilId, CancellationToken ct)
+    {
+        await using var connection = await factory.CreateConnectionAsync(ct);
+        var sql = await lerArquivosSQL.LerArquivoAsync("PegarPostagemSQL.sql", ct);
+
+        var postagem = await connection.QuerySingleOrDefaultAsync<PostagemModel>(
+            new CommandDefinition(sql, new { PostagemId = postagemId, MeuPerfilId = meuPerfilId }, cancellationToken: ct)
+        );
+
+        if (postagem is not null)
+            await PreencherMidiasAsync(connection, [postagem], ct);
+
+        return postagem;
+    }
+
     private async Task PreencherMidiasAsync(DbConnection connection, IReadOnlyList<PostagemModel> postagens, CancellationToken ct)
     {
         if (postagens.Count == 0)
