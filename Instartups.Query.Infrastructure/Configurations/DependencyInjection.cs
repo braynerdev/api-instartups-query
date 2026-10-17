@@ -20,6 +20,7 @@ public static class DependencyInjection
         services.AddSingleton<IPaginadorService, PaginadorService>();
         services.AddScoped<IPegarContextoRequisicaoService, PegarContextoRequisicaoService>();
         services.AddScoped<IPerfilRepository, PerfilRepository>();
+        services.AddScoped<IPostagemRepository, PostagemRepository>();
         return services;
     }
 }

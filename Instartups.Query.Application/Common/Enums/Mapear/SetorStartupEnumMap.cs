@@ -13,4 +13,16 @@ public static class SetorStartupEnumMap
             _ => "ERRO"
         };
     }
+
+    public static SetorStartupEnum MapSetorStartup(this string setor)
+    {
+        return setor.Trim().ToUpperInvariant() switch
+        {
+            "FINANCAS" => SetorStartupEnum.Financas,
+            "SAUDE" => SetorStartupEnum.Saude,
+            "AGRONEGOCIOS" => SetorStartupEnum.Agronegocios,
+            "VAREJO" => SetorStartupEnum.Varejo,
+            _ => 0
+        };
+    }
 }

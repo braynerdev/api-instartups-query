@@ -31,4 +31,14 @@ public class PerfilRepository(
             new CommandDefinition(sql, new { PerfilId = perfilId, UsuarioId = usuarioId }, cancellationToken: ct)
         );
     }
+
+    public async Task<Guid?> PegarMeuPerfilIdAsync(Guid usuarioId, CancellationToken ct)
+    {
+        await using var connection = await factory.CreateConnectionAsync(ct);
+        var sql = await lerArquivosSQL.LerArquivoAsync("PegarMeuPerfilIdSQL.sql", ct);
+
+        return await connection.ExecuteScalarAsync<Guid?>(
+            new CommandDefinition(sql, new { UsuarioId = usuarioId }, cancellationToken: ct)
+        );
+    }
 }

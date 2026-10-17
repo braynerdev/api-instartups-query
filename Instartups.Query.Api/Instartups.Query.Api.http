@@ -12,4 +12,14 @@ GET {{Instartups.Query.Api_HostAddress}}/api/instartups/query/perfil/{{PerfilId}
 Accept: application/json
 Authorization: Bearer {{Token}}
 
+### Q3 · Feed (todos)
+GET {{Instartups.Query.Api_HostAddress}}/api/instartups/query/feed?limite=20
+Accept: application/json
+Authorization: Bearer {{Token}}
+
+### Q3 · Feed (startups filtradas por setor e raio; cole o proximoCursor em &cursor=)
+GET {{Instartups.Query.Api_HostAddress}}/api/instartups/query/feed?tipo=startup&setores=SAUDE&setores=AGRONEGOCIOS&raioKm=50&limite=10
+Accept: application/json
+Authorization: Bearer {{Token}}
+
 ###
