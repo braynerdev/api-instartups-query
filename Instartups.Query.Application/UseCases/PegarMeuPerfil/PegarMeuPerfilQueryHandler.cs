@@ -1,6 +1,6 @@
 using Instartups.Query.Application.Interfaces;
 using Instartups.Query.Application.Interfaces.Repositories;
-using Instartups.Query.Domain.Exceptions;
+using Instartups.Query.Application.Exceptions;
 
 namespace Instartups.Query.Application.UseCases.PegarMeuPerfil;
 

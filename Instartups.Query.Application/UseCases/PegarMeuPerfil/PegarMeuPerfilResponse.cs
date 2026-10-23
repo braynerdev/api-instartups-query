@@ -1,5 +1,4 @@
 using Instartups.Query.Application.Common.Response;
-using Instartups.Query.Domain.Models;
 using Instartups.Query.Domain.Enums;
 using Instartups.Query.Domain.Enums.Mapear;
 
@@ -17,7 +16,7 @@ public sealed record PegarMeuPerfilResponse(
     int TotalSeguindo,
     int TotalCurtidas,
     bool Ativo,
-    DateTime DataCriacao,
+    DateTimeOffset DataCriacao,
     StartupResponse? Startup,
     InvestidorResponse? Investidor
 )

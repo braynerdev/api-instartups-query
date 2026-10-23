@@ -1,4 +1,4 @@
-using Instartups.Query.Domain.Constants;
+using Instartups.Query.Application.Common.Constants;
 
 namespace Instartups.Query.Api.Configurations;
 
