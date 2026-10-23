@@ -22,6 +22,7 @@ A Query não tem banco próprio nem migrations: lê, com SQL escrito à mão (Da
 | [Paginação](PAGINACAO.md) | Paginação por cursor: parâmetros, formato do cursor e como implementar em uma nova query. |
 | [Validações e erros](VALIDACOES-E-ERROS.md) | Regras de cada parâmetro, códigos de erro, exceções e status HTTP. |
 | [Banco de dados](BANCO-DE-DADOS.md) | Tabelas lidas, cada arquivo `.sql`, regras de visibilidade e pontos de atenção de desempenho. |
+| [CI/CD](CI-CD.md) | Pipeline do GitHub Actions, tags da imagem no GHCR e como publicar/puxar a imagem. |
 | [Contribuindo](CONTRIBUINDO.md) | Passo a passo para criar uma nova query e as convenções do projeto. |
 
 A proposta original das consultas, tela a tela, está em [`docs/queries-por-tela.md`](../../../docs/queries-por-tela.md) na raiz do monorepo. Onde a implementação diverge da proposta, a [Referência da API](API.md) avisa.

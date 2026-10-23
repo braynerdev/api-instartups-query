@@ -1,5 +1,24 @@
 <Solution>
-  <Folder Name="/infra/" />
+  <Folder Name="/.github/">
+    <File Path=".github\workflows\ci-cd.yml" />
+  </Folder>
+  <Folder Name="/docs/">
+    <File Path="docs\API.md" />
+    <File Path="docs\ARQUITETURA.md" />
+    <File Path="docs\BANCO-DE-DADOS.md" />
+    <File Path="docs\CI-CD.md" />
+    <File Path="docs\CONFIGURACAO.md" />
+    <File Path="docs\CONTRIBUINDO.md" />
+    <File Path="docs\PAGINACAO.md" />
+    <File Path="docs\README.md" />
+    <File Path="docs\VALIDACOES-E-ERROS.md" />
+  </Folder>
+  <Folder Name="/infra/">
+    <File Path="infra\.env.example" />
+    <File Path="infra\docker-compose.yml" />
+    <File Path="infra\Dockerfile" />
+    <File Path="infra\Dockerfile.dockerignore" />
+  </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
     <File Path=".gitignore" />

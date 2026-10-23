@@ -104,7 +104,7 @@ Na prática, cada usuário pode fazer até 30 requisições a cada 10 segundos, 
 | `UseFluentValidation()` | — | Executa os validators antes dos handlers. |
 | `CritterStackDefaults` | Development: `TypeLoadMode.Dynamic`<br/>Produção: `TypeLoadMode.Static` + `AssertAllPreGeneratedTypesExist = true` | Fora de Development o Wolverine **exige código pré-gerado** para os handlers. |
 
-> **Atenção (deploy):** não há código pré-gerado no repositório, então fora de `Development` a aplicação falha na inicialização. Para gerar, o `Program.cs` precisa terminar com `return await app.RunJasperFxCommands(args);` em vez de `app.Run();`. Depois disso, `dotnet run --project Instartups.Query.Api -- codegen write` grava os arquivos gerados, que devem entrar no build. A Command tem a mesma pendência.
+> **Deploy:** o código pré-gerado fica em `Api/Internal/Generated/` e é compilado junto com a API. Sempre que um handler mudar, regenere com `dotnet run --project Instartups.Query.Api -- codegen write`; sem isso a aplicação falha na inicialização fora de `Development`.
 
 ## Controllers e serialização
 
@@ -139,3 +139,46 @@ Apenas em **Development** (`OpenApiConfig.cs`):
 | --- | --- |
 | Command | `8081` |
 | **Query** | **`8082`** (`launchSettings.json`, `applicationUrl: http://0.0.0.0:8082`, abre `/docs`) |
+
+## Docker
+
+Arquivos em `infra/`: `Dockerfile`, `Dockerfile.dockerignore`, `docker-compose.yml`, `.env.example`. O compose sobe **só a API**; o banco é externo (o mesmo da Command e da Auth) e configurado pelo `infra/.env`. O contexto do build é a raiz do projeto (`context: ..`), e o BuildKit aplica o `Dockerfile.dockerignore` por estar ao lado do `Dockerfile`.
+
+```bash
+cd infra
+cp .env.example .env   # preencha banco, JWT e CORS
+docker compose up -d --build
+docker compose logs -f api-query
+```
+
+A partir da raiz, use `docker compose -f infra/docker-compose.yml ...`.
+
+A API fica em `http://localhost:${API_PORT}` (padrão `8082`) e roda em `Production`. Como a Query não tem migrations, as tabelas precisam ter sido criadas antes pela Command e pela Auth.
+
+| Variável | Uso |
+| --- | --- |
+| `IMAGE_TAG` | Tag da imagem do GHCR (ver [CI/CD](CI-CD.md)). |
+| `ASPNETCORE_ENVIRONMENT` | Ambiente (padrão `Production`). |
+| `API_PORT` | Porta publicada no host. |
+| `TZ` | Fuso horário do container. |
+| `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD` | Montam `ConnectionStrings:PostgresConnection`. |
+| `DB_MIN_POOL_SIZE`, `DB_MAX_POOL_SIZE` | Tamanho do pool do Npgsql. |
+| `JWT_PUBLIC_KEY_FILE` | Caminho no host da chave pública, montada como somente leitura em `/run/keys/jwt-public.pem`. |
+| `JWT_ISSUER`, `JWT_AUDIENCE` | Mesmos valores da `api-instartups-auth`. |
+| `CORS_ORIGIN` | Origem do frontend (`CorsPadrao:0`). |
+| `API_CPUS`, `API_MEMORY` | Limites de recursos do container. |
+
+Detalhes da imagem:
+
+- Build multi-stage com o restore em camada separada e cache do NuGet (BuildKit), então mudanças só no código não refazem o restore. `HUSKY=0` desliga o target do Husky no build.
+- Runtime `aspnet:10.0-noble-chiseled-extra`: sem shell nem gerenciador de pacotes, usuário não-root, com ICU e tzdata. Por não ter shell, não há `HEALTHCHECK`.
+- No compose, o container roda com filesystem somente leitura (`/tmp` em tmpfs), sem capabilities e com `no-new-privileges`. As chaves de Data Protection ficam em memória, o que não afeta a API (autenticação é só por JWT).
+- A connection string usa `Gss Encryption Mode=Disable`: a imagem chiseled não tem `libgssapi_krb5`, e sem isso o Npgsql loga erro ao tentar GSS.
+
+### Banco na própria máquina
+
+Use `DB_HOST=host.docker.internal` (mapeado para o gateway do Docker no compose). O Postgres precisa aceitar conexões vindas da rede do Docker:
+
+- `postgresql.conf`: `listen_addresses` incluindo a interface do bridge, por exemplo `'localhost,172.17.0.1'` ou `'*'`.
+- `pg_hba.conf`: liberar a sub-rede do Docker, por exemplo `host all all 172.16.0.0/12 scram-sha-256`.
+- Reinicie o Postgres depois de alterar.
