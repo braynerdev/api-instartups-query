@@ -1,0 +1,33 @@
+# Saídas de build
+**/bin/
+**/obj/
+**/TestResults/
+
+# Fora do build da imagem
+tests/
+docs/
+infra/
+.git/
+.gitignore
+.idea/
+.vs/
+.vscode/
+.husky/
+.config/
+*.md
+*.http
+.editorconfig
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose*.yml
+
+# Segredos e configs locais
+.env
+.env.*
+*.pem
+secrets.json
+**/appsettings.Development.json
+**/appsettings.Local.json
+**/Properties/launchSettings.json

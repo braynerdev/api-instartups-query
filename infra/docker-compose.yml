@@ -1,0 +1,42 @@
+name: instartups
+
+services:
+  api-query:
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile
+    image: ghcr.io/braynerdev/api-instartups-query:${IMAGE_TAG:-latest}
+    container_name: instartups-api-query
+    restart: unless-stopped
+    ports:
+      - "${API_PORT:-8082}:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Production}
+      ConnectionStrings__PostgresConnection: "Host=${DB_HOST:?defina DB_HOST no .env};Port=${DB_PORT:-5432};Database=${DB_NAME:?defina DB_NAME no .env};Username=${DB_USER:?defina DB_USER no .env};Password=${DB_PASSWORD:?defina DB_PASSWORD no .env};Pooling=true;Minimum Pool Size=${DB_MIN_POOL_SIZE:-0};Maximum Pool Size=${DB_MAX_POOL_SIZE:-50};Gss Encryption Mode=Disable"
+      JWT__PublicKeyPath: /run/keys/jwt-public.pem
+      JWT__Issuer: ${JWT_ISSUER:?defina JWT_ISSUER no .env}
+      JWT__Audience: ${JWT_AUDIENCE:?defina JWT_AUDIENCE no .env}
+      CorsPadrao__0: ${CORS_ORIGIN:?defina CORS_ORIGIN no .env}
+      Serilog__Properties__Application: Instartups.Query
+      TZ: ${TZ:-America/Sao_Paulo}
+    volumes:
+      - ${JWT_PUBLIC_KEY_FILE:-../../keys/jwt-public.pem}:/run/keys/jwt-public.pem:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    deploy:
+      resources:
+        limits:
+          cpus: "${API_CPUS:-1.0}"
+          memory: ${API_MEMORY:-512M}
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

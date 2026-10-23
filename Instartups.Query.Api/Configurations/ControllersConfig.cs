@@ -1,5 +1,5 @@
 ﻿using Instartups.Query.Api.DTOs;
-using Instartups.Query.Domain.Constants;
+using Instartups.Query.Application.Common.Constants;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Instartups.Query.Api.Configurations;

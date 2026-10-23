@@ -1,4 +1,4 @@
-using Instartups.Query.Domain.Models;
+using Instartups.Query.Application.Common.Models;
 
 namespace Instartups.Query.Application.Common.Response;
 
@@ -8,7 +8,7 @@ public sealed record InvestidorResponse(
     decimal TicketMaximo
 )
 {
-    public static InvestidorResponse FromModel(PerfilModel perfil)
+    public static InvestidorResponse FromModel(PerfilBaseModel perfil)
     {
         return new InvestidorResponse(
             perfil.TeseInvestimento!,

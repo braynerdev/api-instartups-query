@@ -1,8 +1,70 @@
 @Instartups.Query.Api_HostAddress = http://localhost:8082
 @Token = COLE_AQUI_O_ACCESS_TOKEN
+@PerfilId = COLE_AQUI_O_ID_DO_PERFIL
+@PostagemId = COLE_AQUI_O_ID_DA_POSTAGEM
 
 ### Q1 · Meu perfil
 GET {{Instartups.Query.Api_HostAddress}}/api/instartups/query/perfil/me
+Accept: application/json
+Authorization: Bearer {{Token}}
+
+### Q2 · Perfil público
+GET {{Instartups.Query.Api_HostAddress}}/api/instartups/query/perfil/{{PerfilId}}
+Accept: application/json
+Authorization: Bearer {{Token}}
+
+### Q3 · Feed (todos)
+GET {{Instartups.Query.Api_HostAddress}}/api/instartups/query/feed?limite=20
+Accept: application/json
+Authorization: Bearer {{Token}}
+
+### Q3 · Feed (startups filtradas por setor e raio; cole o proximoCursor em &cursor=)
+GET {{Instartups.Query.Api_HostAddress}}/api/instartups/query/feed?tipo=startup&setores=SAUDE&setores=AGRONEGOCIOS&raioKm=50&limite=10
+Accept: application/json
+Authorization: Bearer {{Token}}
+
+### Q4 · Postagens do perfil (no meu perfil, inclui as desativadas)
+GET {{Instartups.Query.Api_HostAddress}}/api/instartups/query/perfil/{{PerfilId}}/postagens?limite=20
+Accept: application/json
+Authorization: Bearer {{Token}}
+
+### Q4 · Postagens do perfil (próxima página; cole o proximoCursor em &cursor=)
+GET {{Instartups.Query.Api_HostAddress}}/api/instartups/query/perfil/{{PerfilId}}/postagens?limite=2&cursor=
+Accept: application/json
+Authorization: Bearer {{Token}}
+
+### Q5 · Setores
+GET {{Instartups.Query.Api_HostAddress}}/api/instartups/query/setores
+Accept: application/json
+Authorization: Bearer {{Token}}
+
+### Q5 · Setores (busca sem acento: "saude" encontra "Saúde")
+GET {{Instartups.Query.Api_HostAddress}}/api/instartups/query/setores?busca=saude
+Accept: application/json
+Authorization: Bearer {{Token}}
+
+### Q6 · Uma postagem (o autor vê também a desativada)
+GET {{Instartups.Query.Api_HostAddress}}/api/instartups/query/postagem/{{PostagemId}}
+Accept: application/json
+Authorization: Bearer {{Token}}
+
+### Q7 · Busca de perfis por nome ou @usuário (sem acento, mínimo 2 caracteres)
+GET {{Instartups.Query.Api_HostAddress}}/api/instartups/query/busca?termo=saude&tipo=todos&limite=20
+Accept: application/json
+Authorization: Bearer {{Token}}
+
+### Q7 · Busca por @usuário só entre startups
+GET {{Instartups.Query.Api_HostAddress}}/api/instartups/query/busca?termo=@vitalis&tipo=startup
+Accept: application/json
+Authorization: Bearer {{Token}}
+
+### Q7 · Busca por e-mail completo (só igualdade exata; volta encontradoPor = "email")
+GET {{Instartups.Query.Api_HostAddress}}/api/instartups/query/busca?termo=fulano@exemplo.com
+Accept: application/json
+Authorization: Bearer {{Token}}
+
+### Q7 · Busca (próxima página; cole o proximoCursor em &cursor=)
+GET {{Instartups.Query.Api_HostAddress}}/api/instartups/query/busca?termo=sa&limite=1&cursor=
 Accept: application/json
 Authorization: Bearer {{Token}}
 

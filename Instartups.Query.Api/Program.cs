@@ -1,7 +1,8 @@
 using Instartups.Query.Api.Configurations;
 using Instartups.Query.Api.Extensions;
-using Instartups.Query.Domain.Constants;
+using Instartups.Query.Application.Common.Constants;
 using Instartups.Query.Infrastructure.Configurations;
+using JasperFx;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,4 +45,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+return await app.RunJasperFxCommands(args);

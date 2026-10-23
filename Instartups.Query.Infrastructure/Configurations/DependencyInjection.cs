@@ -16,9 +16,11 @@ public static class DependencyInjection
         services.AddHttpContextAccessor();
 
         services.AddSingleton<IDbConnectionFactory, DbConnectionFactory>();
-        services.AddSingleton<LerArquivosSQL>();
-        services.AddScoped<IPegarContextoRequisicao, PegarContextoRequisicao>();
+        services.AddSingleton<LerArquivosSQLService>();
+        services.AddSingleton<IPaginadorService, PaginadorService>();
+        services.AddScoped<IPegarContextoRequisicaoService, PegarContextoRequisicaoService>();
         services.AddScoped<IPerfilRepository, PerfilRepository>();
+        services.AddScoped<IPostagemRepository, PostagemRepository>();
         return services;
     }
 }

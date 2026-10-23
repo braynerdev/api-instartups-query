@@ -1,4 +1,4 @@
-using Instartups.Query.Domain.Models;
+using Instartups.Query.Application.Common.Models;
 using Instartups.Query.Domain.Enums;
 using Instartups.Query.Domain.Enums.Mapear;
 
@@ -12,7 +12,7 @@ public sealed record StartupResponse(
     string Setor
 )
 {
-    public static StartupResponse FromModel(PerfilModel perfil)
+    public static StartupResponse FromModel(PerfilBaseModel perfil)
     {
         return new StartupResponse(
             perfil.Pitch!,
