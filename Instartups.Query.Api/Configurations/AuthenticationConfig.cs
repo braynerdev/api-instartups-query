@@ -11,11 +11,11 @@ public static class AuthenticationConfig
 {
     public static IServiceCollection AddAuthenticationConfig(this IServiceCollection services, IConfiguration configuration)
     {
-        var pubKeyPath = configuration["JWT:PublicKeyPath"] ?? throw new ArgumentException("Caminho da chave pública inválido!");
+        var pubKeyPath = configuration["Jwt:PublicKeyPath"] ?? throw new ArgumentException("Caminho da chave pública inválido!");
         var pubKey = File.ReadAllText(pubKeyPath, Encoding.UTF8) ?? throw new ArgumentException("Chave pública inválida!");
         
-        var issuer = configuration["JWT:Issuer"] ?? throw new ArgumentException("Emissor inválido!");
-        var audience = configuration["JWT:Audience"] ?? throw new ArgumentException("Público-alvo inválido!");
+        var issuer = configuration["Jwt:Issuer"] ?? throw new ArgumentException("Emissor inválido!");
+        var audience = configuration["Jwt:Audience"] ?? throw new ArgumentException("Público-alvo inválido!");
 
         var rsa = RSA.Create();
         rsa.ImportFromPem(pubKey);
