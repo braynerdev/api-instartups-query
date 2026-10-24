@@ -7,6 +7,7 @@ services:
     image: ghcr.io/braynerdev/api-instartups-query:${IMAGE_TAG:-latest}
     environment:
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Production}
+      AllowedHosts: ${ALLOWED_HOSTS}
       ASPNETCORE_FORWARDEDHEADERS_ENABLED: "true"
       TZ: America/Sao_Paulo
       ConnectionStrings__PostgresConnection: "Host=${DB_HOST:?defina DB_HOST no .env};Port=${DB_PORT:-5432};Database=${DB_NAME:?defina DB_NAME no .env};Username=${DB_USER:?defina DB_USER no .env};Password=${DB_PASSWORD:?defina DB_PASSWORD no .env};SSL Mode=${DB_SSL_MODE:-Prefer};Pooling=true;Minimum Pool Size=0;Maximum Pool Size=50;Gss Encryption Mode=Disable"
