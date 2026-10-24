@@ -142,7 +142,7 @@ Apenas em **Development** (`OpenApiConfig.cs`):
 
 ## Docker
 
-Arquivos em `infra/`: `Dockerfile`, `Dockerfile.dockerignore`, `docker-compose.yml`, `.env.example`. O compose sobe **só a API**, puxando a imagem do GHCR (não builda). É uma **stack do Docker Swarm**, aplicada pelo Portainer com `docker stack deploy`. O banco é externo (o mesmo da Command e da Auth). A API é exposta pelo **Traefik** em `https://api.instartups.tech/api/instartups/query`. O passo a passo do servidor (DNS na Hostinger, rede `proxy`, Traefik, certificados, Portainer) está em `INSTARTUPS/infra/README.md`, fora deste repositório.
+Arquivos em `infra/`: `Dockerfile`, `Dockerfile.dockerignore`, `docker-compose.yml`, `.env.example`. O compose sobe **só a API**, puxando a imagem do GHCR (não builda). É uma **stack do Docker Swarm**, aplicada pelo Portainer com `docker stack deploy`. O banco é externo (o mesmo da Command e da Auth). A API é exposta pelo **Traefik** em `https://query.instartups.tech/api/instartups/query`. O passo a passo do servidor (DNS na Hostinger, rede `proxy`, Traefik, certificados, Portainer) está em `INSTARTUPS/infra/README.md`, fora deste repositório.
 
 ### Onde fica cada configuração
 
@@ -156,7 +156,7 @@ O `.env` **não entra no container sozinho**: ele só preenche os `${VAR}` do co
 
 ### Subindo no servidor (Portainer)
 
-1. Infra pronta conforme `INSTARTUPS/infra/README.md`: rede `proxy`, Traefik e DNS de `api.instartups.tech`.
+1. Infra pronta conforme `INSTARTUPS/infra/README.md`: rede `proxy`, Traefik e DNS de `query.instartups.tech`.
 2. Chave pública em caminho **absoluto** no host (ex.: `/opt/instartups/keys/jwt-public.pem`), legível pelo usuário `app` do container (uid 1654): `chmod 644`.
 3. Registry `ghcr.io` cadastrado no Portainer (PAT com `read:packages`).
 4. Stack com o `infra/docker-compose.yml` e as variáveis do `.env.example` preenchidas. Para atualizar: *Update the stack* com **Re-pull image and redeploy** (`update_config: start-first`, com rollback automático se o container novo falhar).
@@ -167,7 +167,7 @@ A API roda em `Production`. Como a Query não tem migrations, as tabelas precisa
 | --- | --- |
 | `IMAGE_TAG` | Tag da imagem do GHCR (ver [CI/CD](CI-CD.md)). |
 | `ASPNETCORE_ENVIRONMENT` | Ambiente (padrão `Production`). |
-| `API_DOMAIN` | Subdomínio das APIs (`api.instartups.tech`), o mesmo nas 3. |
+| `API_DOMAIN` | Subdomínio desta API (`query.instartups.tech`); o Traefik roteia pelo host. |
 | `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD` | Montam `ConnectionStrings:PostgresConnection` (pool fixo em 0–50 no compose). |
 | `DB_SSL_MODE` | `SSL Mode` do Npgsql (padrão `Prefer`; use `Require` se o provedor exigir). |
 | `JWT_PUBLIC_KEY_FILE` | Caminho absoluto no host da chave pública, montada como somente leitura em `/run/keys/jwt-public.pem`. |
