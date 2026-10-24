@@ -47,12 +47,6 @@ echo "<token>" | docker login ghcr.io -u <usuario> --password-stdin
 
 Ou torne o pacote público em *GitHub → Packages → api-instartups-query → Package settings*.
 
-O `infra/docker-compose.yml` usa `ghcr.io/braynerdev/api-instartups-query:${IMAGE_TAG:-latest}`. Defina `IMAGE_TAG` no `infra/.env` (`latest`, `homolog`, `develop`, `1.2.3` ou `sha-xxxxxxx`) e:
+O `infra/docker-compose.yml` usa `ghcr.io/braynerdev/api-instartups-query:${IMAGE_TAG:-latest}` e **não builda** (é uma stack do Docker Swarm). No Portainer, cadastre o registry `ghcr.io` com o token acima, defina `IMAGE_TAG` nas variáveis da stack (`latest`, `homolog`, `develop`, `1.2.3` ou `sha-xxxxxxx`) e, a cada nova imagem, use *Update the stack* com **Re-pull image and redeploy**. Variáveis e chaves em [Configuração › Docker](CONFIGURACAO.md#docker); servidor (DNS, Traefik, certificados, Portainer) em `INSTARTUPS/infra/README.md`.
 
-```bash
-cd infra
-docker compose pull
-docker compose up -d
-```
-
-Para gerar a imagem localmente com o mesmo nome, `docker compose build` continua funcionando.
+Para gerar a imagem localmente: `docker build -f infra/Dockerfile -t ghcr.io/braynerdev/api-instartups-query:local .` na raiz do repositório.

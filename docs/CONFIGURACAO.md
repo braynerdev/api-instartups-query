@@ -4,21 +4,21 @@
 
 A configuração segue o padrão do ASP.NET Core: `appsettings.json` → `appsettings.{Ambiente}.json` → user-secrets (em Development) → variáveis de ambiente → argumentos de linha de comando. A fonte mais à direita vence.
 
-Em variáveis de ambiente, use `__` como separador de seção, por exemplo `ConnectionStrings__PostgresConnection` e `JWT__PublicKeyPath`.
+Em variáveis de ambiente, use `__` como separador de seção, por exemplo `ConnectionStrings__PostgresConnection` e `Jwt__Issuer`.
 
 ## Chaves de configuração
 
 | Chave | Obrigatória | Descrição |
 | --- | --- | --- |
 | `ConnectionStrings:PostgresConnection` | Sim | Connection string do PostgreSQL (Npgsql). Deve apontar para o **mesmo banco** da Command (schema `public`) e da Auth (schema `auth`). Sem ela a aplicação não sobe (`Connection string 'PostgresConnection' não configurada.`). |
-| `JWT:PublicKeyPath` | Sim | Caminho do arquivo PEM com a **chave pública RSA** da `api-instartups-auth`. O arquivo é lido na inicialização; caminho vazio ou inexistente derruba a aplicação. |
-| `JWT:Issuer` | Sim | Emissor (`iss`) esperado no token. |
-| `JWT:Audience` | Sim | Público (`aud`) esperado no token. |
+| `Jwt:PublicKeyPath` | Sim | Caminho do arquivo PEM com a **chave pública RSA** da `api-instartups-auth`. O arquivo é lido na inicialização; caminho vazio ou inexistente derruba a aplicação. |
+| `Jwt:Issuer` | Sim | Emissor (`iss`) esperado no token. |
+| `Jwt:Audience` | Sim | Público (`aud`) esperado no token. |
 | `CorsPadrao` | Sim | Array de origens permitidas pela política CORS `FRONTEND`. Ausente → `Lista de origens base inválida.` na inicialização. |
 | `Serilog` | Sim | Níveis mínimos, sinks e propriedades dos logs (ver abaixo). |
 | `AllowedHosts` | Não | Padrão do ASP.NET Core (`*`). |
 
-`appsettings.json` traz apenas valores de exemplo (`EXEMPLO`, `NOME APP`, `https://IP:PORT`). O `appsettings.Development.json` está no `.gitignore` (assim como `*.pem` e `launchSettings.json`), então cada máquina tem o seu.
+`appsettings.json` traz só o que é fixo (logs, `Jwt:PublicKeyPath` = `/run/keys/jwt-public.pem`, `AllowedHosts`) e deixa vazios os valores de ambiente (connection string, issuer/audience, `CorsPadrao: []`), que no container vêm do `infra/.env`. O `appsettings.Development.json` está no `.gitignore` (assim como `*.pem` e `launchSettings.json`), então cada máquina tem o seu.
 
 Exemplo de `appsettings.Development.json` (sem segredos):
 
@@ -30,7 +30,7 @@ Exemplo de `appsettings.Development.json` (sem segredos):
   "Serilog": {
     "Properties": { "Application": "Instartups.Query" }
   },
-  "JWT": {
+  "Jwt": {
     "PublicKeyPath": "/caminho/para/INSTARTUPS/keys/jwt-public.pem",
     "Issuer": "<mesmo issuer da api-instartups-auth>",
     "Audience": "<mesma audience da api-instartups-auth>"
@@ -84,8 +84,8 @@ Na prática, cada usuário pode fazer até 30 requisições a cada 10 segundos, 
 ## Logs (Serilog)
 
 - Lido da seção `Serilog` (`ReadFrom.Configuration`), enriquecido com `LogContext` e com a propriedade `Application`.
-- Sinks configurados: `Console` (tema ANSI) e `Debug`.
-- Níveis: `Information` por padrão; `Microsoft` e `Wolverine` em `Warning` (nos dois arquivos de configuração).
+- Sinks: em produção, `Console` sem tema (logs limpos no Portainer); o `appsettings.Development.json` liga o tema ANSI e acrescenta `Debug`.
+- Níveis (iguais nas 3 APIs, definidos só no `appsettings.json`): `Information` por padrão; `Microsoft` e `Wolverine` em `Warning`; `Microsoft.Hosting.Lifetime` em `Information`.
 - O Wolverine não loga execução nem sucesso das mensagens (`MessageExecutionLogLevel` e `MessageSuccessLogLevel` = `None`).
 - **Log por requisição** (`UseSerilogRequestLogging`) com as propriedades `HostRequisicao`, `CaminhoRequisicao` e `Metodo`. Nível:
   - `Error` se houve exceção ou status ≥ 500;
@@ -142,43 +142,51 @@ Apenas em **Development** (`OpenApiConfig.cs`):
 
 ## Docker
 
-Arquivos em `infra/`: `Dockerfile`, `Dockerfile.dockerignore`, `docker-compose.yml`, `.env.example`. O compose sobe **só a API**; o banco é externo (o mesmo da Command e da Auth) e configurado pelo `infra/.env`. O contexto do build é a raiz do projeto (`context: ..`), e o BuildKit aplica o `Dockerfile.dockerignore` por estar ao lado do `Dockerfile`.
+Arquivos em `infra/`: `Dockerfile`, `Dockerfile.dockerignore`, `docker-compose.yml`, `.env.example`. O compose sobe **só a API**, puxando a imagem do GHCR (não builda). É uma **stack do Docker Swarm**, aplicada pelo Portainer com `docker stack deploy`. O banco é externo (o mesmo da Command e da Auth). A API é exposta pelo **Traefik** em `https://api.instartups.tech/api/instartups/query`. O passo a passo do servidor (DNS na Hostinger, rede `proxy`, Traefik, certificados, Portainer) está em `INSTARTUPS/infra/README.md`, fora deste repositório.
 
-```bash
-cd infra
-cp .env.example .env   # preencha banco, JWT e CORS
-docker compose up -d --build
-docker compose logs -f api-query
-```
+### Onde fica cada configuração
 
-A partir da raiz, use `docker compose -f infra/docker-compose.yml ...`.
+| Onde | O quê |
+| --- | --- |
+| `appsettings.json` (dentro da imagem) | Log (níveis, sink, `Application`), `Jwt:PublicKeyPath` (`/run/keys/jwt-public.pem`), `AllowedHosts` |
+| `docker-compose.yml` | Mapeia as variáveis do `.env` para as chaves do .NET (`Secao__Chave`) e fixa o que é de infraestrutura: TZ, pool do banco, limites, hardening e labels do Traefik |
+| `.env` / variáveis da stack no Portainer | Só o que muda por ambiente ou é segredo |
 
-A API fica em `http://localhost:${API_PORT}` (padrão `8082`) e roda em `Production`. Como a Query não tem migrations, as tabelas precisam ter sido criadas antes pela Command e pela Auth.
+O `.env` **não entra no container sozinho**: ele só preenche os `${VAR}` do compose. É o bloco `environment:` que leva os valores para a API. Os `${VAR:?}` fazem o deploy falhar se faltar algo obrigatório.
+
+### Subindo no servidor (Portainer)
+
+1. Infra pronta conforme `INSTARTUPS/infra/README.md`: rede `proxy`, Traefik e DNS de `api.instartups.tech`.
+2. Chave pública em caminho **absoluto** no host (ex.: `/opt/instartups/keys/jwt-public.pem`), legível pelo usuário `app` do container (uid 1654): `chmod 644`.
+3. Registry `ghcr.io` cadastrado no Portainer (PAT com `read:packages`).
+4. Stack com o `infra/docker-compose.yml` e as variáveis do `.env.example` preenchidas. Para atualizar: *Update the stack* com **Re-pull image and redeploy** (`update_config: start-first`, com rollback automático se o container novo falhar).
+
+A API roda em `Production`. Como a Query não tem migrations, as tabelas precisam ter sido criadas antes pela Command e pela Auth.
 
 | Variável | Uso |
 | --- | --- |
 | `IMAGE_TAG` | Tag da imagem do GHCR (ver [CI/CD](CI-CD.md)). |
 | `ASPNETCORE_ENVIRONMENT` | Ambiente (padrão `Production`). |
-| `API_PORT` | Porta publicada no host. |
-| `TZ` | Fuso horário do container. |
-| `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD` | Montam `ConnectionStrings:PostgresConnection`. |
-| `DB_MIN_POOL_SIZE`, `DB_MAX_POOL_SIZE` | Tamanho do pool do Npgsql. |
-| `JWT_PUBLIC_KEY_FILE` | Caminho no host da chave pública, montada como somente leitura em `/run/keys/jwt-public.pem`. |
-| `JWT_ISSUER`, `JWT_AUDIENCE` | Mesmos valores da `api-instartups-auth`. |
+| `API_DOMAIN` | Subdomínio das APIs (`api.instartups.tech`), o mesmo nas 3. |
+| `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD` | Montam `ConnectionStrings:PostgresConnection` (pool fixo em 0–50 no compose). |
+| `DB_SSL_MODE` | `SSL Mode` do Npgsql (padrão `Prefer`; use `Require` se o provedor exigir). |
+| `JWT_PUBLIC_KEY_FILE` | Caminho absoluto no host da chave pública, montada como somente leitura em `/run/keys/jwt-public.pem`. |
+| `JWT_ISSUER`, `JWT_AUDIENCE` | `Jwt:Issuer` / `Jwt:Audience`; mesmos valores da `api-instartups-auth`. |
 | `CORS_ORIGIN` | Origem do frontend (`CorsPadrao:0`). |
-| `API_CPUS`, `API_MEMORY` | Limites de recursos do container. |
+
+O container não publica porta no host: só o Traefik o alcança, pela rede `proxy`. `ASPNETCORE_FORWARDEDHEADERS_ENABLED=true` faz a API respeitar o `X-Forwarded-Proto/For` do Traefik, então o `UseHttpsRedirection`/`UseHsts` enxerga `https` (sem loop de redirect) e os logs registram o IP real do cliente.
 
 Detalhes da imagem:
 
-- Build multi-stage com o restore em camada separada e cache do NuGet (BuildKit), então mudanças só no código não refazem o restore. `HUSKY=0` desliga o target do Husky no build.
+- Build multi-stage com o restore em camada separada e cache do NuGet (BuildKit), então mudanças só no código não refazem o restore. `HUSKY=0` desliga o target do Husky no build. Para buildar localmente: `docker build -f infra/Dockerfile -t ghcr.io/braynerdev/api-instartups-query:local .` na raiz do repositório.
 - Runtime `aspnet:10.0-noble-chiseled-extra`: sem shell nem gerenciador de pacotes, usuário não-root, com ICU e tzdata. Por não ter shell, não há `HEALTHCHECK`.
-- No compose, o container roda com filesystem somente leitura (`/tmp` em tmpfs), sem capabilities e com `no-new-privileges`. As chaves de Data Protection ficam em memória, o que não afeta a API (autenticação é só por JWT).
+- No compose, o container roda com filesystem somente leitura (`/tmp` em tmpfs), e sem capabilities. As chaves de Data Protection ficam em memória, o que não afeta a API (autenticação é só por JWT).
 - A connection string usa `Gss Encryption Mode=Disable`: a imagem chiseled não tem `libgssapi_krb5`, e sem isso o Npgsql loga erro ao tentar GSS.
+- O compose segue o schema do Swarm (`version: "3.8"`): **sem `name:` no topo**, porque o `docker stack deploy` recusa (`Additional property name is not allowed`; era o bug do `name: instartups`). `pull_policy` também é recusado, e `container_name`, `restart` e `security_opt` são ignorados. As labels do Traefik ficam em `deploy.labels`. Para validar: `docker stack config -c infra/docker-compose.yml`.
 
-### Banco na própria máquina
+### Banco externo
 
-Use `DB_HOST=host.docker.internal` (mapeado para o gateway do Docker no compose). O Postgres precisa aceitar conexões vindas da rede do Docker:
-
-- `postgresql.conf`: `listen_addresses` incluindo a interface do bridge, por exemplo `'localhost,172.17.0.1'` ou `'*'`.
-- `pg_hba.conf`: liberar a sub-rede do Docker, por exemplo `host all all 172.16.0.0/12 scram-sha-256`.
-- Reinicie o Postgres depois de alterar.
+- `DB_HOST` é o endereço do provedor. Se ele tiver lista de IPs liberados, inclua o IP do servidor.
+- SSL: `DB_SSL_MODE=Prefer` usa SSL quando o servidor oferece; `Require` obriga.
+- Conexões: cada API abre até 50 (pool do compose), ou seja, até 150 com as 3. Confira o limite do plano do banco e, se preciso, reduza o `Maximum Pool Size` nos composes.
+- A Query não tem migrations: as tabelas precisam ter sido criadas antes pela Command e pela Auth.

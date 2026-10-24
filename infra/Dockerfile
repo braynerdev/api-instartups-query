@@ -13,14 +13,12 @@ COPY global.json ./
 COPY Instartups.Query.Application/Instartups.Query.Application.csproj Instartups.Query.Application/
 COPY Instartups.Query.Infrastructure/Instartups.Query.Infrastructure.csproj Instartups.Query.Infrastructure/
 COPY Instartups.Query.Api/Instartups.Query.Api.csproj Instartups.Query.Api/
-RUN --mount=type=cache,id=nuget,target=/root/.nuget/packages \
-    dotnet restore Instartups.Query.Api/Instartups.Query.Api.csproj -a $TARGETARCH
+RUN dotnet restore Instartups.Query.Api/Instartups.Query.Api.csproj -a $TARGETARCH
 
 COPY Instartups.Query.Application/ Instartups.Query.Application/
 COPY Instartups.Query.Infrastructure/ Instartups.Query.Infrastructure/
 COPY Instartups.Query.Api/ Instartups.Query.Api/
-RUN --mount=type=cache,id=nuget,target=/root/.nuget/packages \
-    dotnet publish Instartups.Query.Api/Instartups.Query.Api.csproj \
+RUN dotnet publish Instartups.Query.Api/Instartups.Query.Api.csproj \
         -c Release -a $TARGETARCH --no-restore --self-contained false \
         -o /app \
         -p:UseAppHost=false \
